@@ -1,0 +1,154 @@
+- id: '1582060610562'
+  alias: Slaapkamer remote stop muziek
+  description: ''
+  trigger:
+  - entity_id: remote.slaapkamer_switch
+    platform: state
+  condition:
+  - condition: state
+    entity_id: remote.slaapkamer_switch
+    state: 4_click_up
+  action:
+  - data: {}
+    entity_id: media_player.living_room_speaker
+    service: media_player.media_stop
+- id: '1582061238086'
+  alias: Slaapkamer remote long press start radio 2
+  description: ''
+  trigger:
+  - entity_id: remote.slaapkamer_switch
+    platform: state
+  condition:
+  - condition: state
+    entity_id: remote.slaapkamer_switch
+    state: 1_hold_up
+  action:
+  - data:
+      media_content_id: http://icecast.omroep.nl/radio2-bb-aac
+      media_content_type: music
+    entity_id: media_player.living_room_speaker
+    service: media_player.play_media
+  - data:
+      volume_level: 0.1
+    entity_id: media_player.living_room_speaker
+    service: media_player.volume_set
+- id: '1582141338362'
+  alias: Thijs comes home
+  description: ''
+  trigger:
+  - above: '30'
+    entity_id: sensor.pres_thijs
+    platform: numeric_state
+  condition: []
+  action:
+  - data: {}
+    entity_id: input_boolean.thijs_home
+    service: input_boolean.turn_on
+- id: '1582141522365'
+  alias: Lieske comes home
+  description: ''
+  trigger:
+  - above: '30'
+    entity_id: sensor.pres_lieske
+    platform: numeric_state
+  condition: []
+  action:
+  - entity_id: input_boolean.lieske_home
+    service: input_boolean.turn_on
+- id: '1582141860645'
+  alias: Lieske leaves home
+  description: ''
+  trigger:
+  - below: '20'
+    entity_id: sensor.pres_lieske
+    platform: numeric_state
+  condition: []
+  action:
+  - entity_id: input_boolean.lieske_home
+    service: input_boolean.toggle
+- id: '1582141893718'
+  alias: Thijs leaves home
+  description: ''
+  trigger:
+  - below: '20'
+    entity_id: sensor.pres_thijs
+    platform: numeric_state
+  condition: []
+  action:
+  - entity_id: input_boolean.thijs_home
+    service: input_boolean.toggle
+- id: '1582142506163'
+  alias: Occupance on
+  description: ''
+  trigger:
+  - entity_id: input_boolean.lieske_home
+    platform: state
+    to: 'on'
+  - entity_id: input_boolean.thijs_home
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - entity_id: input_boolean.occupancy
+    service: input_boolean.turn_on
+- id: '1582142590778'
+  alias: Occupance off
+  description: ''
+  trigger:
+  - entity_id: input_boolean.thijs_home
+    platform: state
+    to: 'off'
+  - entity_id: input_boolean.lieske_home
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: input_boolean.lieske_home
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.thijs_home
+    state: 'off'
+  action:
+  - entity_id: input_boolean.occupancy
+    service: input_boolean.turn_off
+- id: '1582147844183'
+  alias: Start Lieske
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition:
+  - above: '20'
+    condition: numeric_state
+    entity_id: sensor.pres_lieske
+  action:
+  - data: {}
+    entity_id: input_boolean.lieske_home
+    service: input_boolean.turn_on
+- id: Start_Thijs
+  alias: Start Thijs
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition:
+  - above: '20'
+    condition: numeric_state
+    entity_id: sensor.pres_thijs
+  action:
+  - data: {}
+    entity_id: input_boolean.thijs_home
+    service: input_boolean.turn_on
+- id: '1584563345620'
+  alias: Koffie notify
+  description: ''
+  trigger:
+  - above: '100'
+    entity_id: sensor.temperature
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      message: De koffie is warm!
+      title: Koffiemachine
+    service: notify.notify

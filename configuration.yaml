@@ -1,0 +1,86 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# binary_sensor:
+#   - platform: huesensor
+# remote:
+#   - platform: huesensor
+
+spotcast:
+  username: thijsje123
+  password: !secret spotify_password
+
+# Example configuration.yaml entry
+hue:
+  bridges:
+    - host: 192.168.2.7
+
+sensor:
+- platform: mqtt
+  state_topic: 'presence/raspberrypi/thijs'
+  value_template: '{{ value_json.confidence }}'
+  unit_of_measurement: '%'
+  name: 'Pres Thijs'
+- platform: mqtt
+  state_topic: 'presence/raspberrypi/lieske'
+  value_template: '{{ value_json.confidence }}'
+  unit_of_measurement: '%'
+  name: 'Pres Lieske '  
+- platform: growatt_server
+  username: thijsje123
+  password: !secret growatt_password  
+- platform: mqtt
+  name: "Temperature"
+  state_topic: "koffie/actualtemp"
+  unit_of_measurement: '°C'
+- platform: mqtt
+  name: "Set Temperature"
+  state_topic: "koffie/settemp"
+  unit_of_measurement: '°C'
+- platform: dsmr_reader
+shopping_list:
+
+  
+input_boolean:
+  thijs_home:
+    name: Thijs is at home
+    initial: off
+  lieske_home:
+    name: Lieske is at home
+    initial: off
+  occupancy:
+    name: Somebody is at home
+    initial: off    
+    
+sonoff:
+  username: 'thijsfranssen@gmail.com'
+  password: !secret sonoff_password
+
+input_select:
+  radio_station:
+    name: 'Select Radio Station:'
+    options:
+      - 'Radio 538'
+      - 'Q-Music'
+      - 'Radio 2'
+      - '3FM'
+      - 'Sublime'
+      - '100% NL'
+      - 'Veronica'
+      - 'Sky Radio'
+      - 'Arrow Classic Rock'
+      - 'BNR Nieuwsradio'

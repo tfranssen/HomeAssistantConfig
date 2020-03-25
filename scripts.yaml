@@ -1,0 +1,45 @@
+radio538:
+  alias: Play Radio on Chromecast Audio
+  sequence:
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.living_room_speaker
+      volume_level: '0.12'
+  - service: media_player.play_media
+    data_template:
+      entity_id: media_player.living_room_speaker
+      media_content_id: "{% if is_state(\"input_select.radio_station\", \"Radio 538\"\
+        ) %} http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3\
+        \ {% elif is_state(\"input_select.radio_station\", \"Q-Music\") %} http://icecast-qmusic.cdp.triple-it.nl/Qmusic_nl_live_96.mp3\
+        \ {% elif is_state(\"input_select.radio_station\", \"3FM\") %} http://icecast.omroep.nl/3fm-bb-mp3\
+        \ {% elif is_state(\"input_select.radio_station\", \"100% NL\") %} http://stream.100p.nl/100pctnl.mp3\
+        \ {% elif is_state(\"input_select.radio_station\", \"Veronica\") %} https://20873.live.streamtheworld.com/VERONICA.mp3\
+        \ {% elif is_state(\"input_select.radio_station\", \"Sky Radio\") %} https://19993.live.streamtheworld.com/SKYRADIO.mp3\
+        \ {% elif is_state(\"input_select.radio_station\", \"Arrow Classic Rock\"\
+        ) %} https://stream.gal.io/arrow?1579873649949\t {% elif is_state(\"input_select.radio_station\"\
+        , \"BNR Nieuwsradio\") %} http://icecast-bnr.cdp.triple-it.nl/bnr_mp3_96_03\
+        \ {% elif is_state(\"input_select.radio_station\", \"Radio 2\") %} http://icecast.omroep.nl/radio2-bb-mp3\
+        \ {% elif is_state(\"input_select.radio_station\", \"Sublime\") %} http://stream.sublimefm.nl/SublimeFM_mp3\
+        \ {% endif %}\n"
+      media_content_type: audio/mp4
+'1584555732335':
+  alias: Set Coffeemaker to 100c
+  sequence:
+  - data:
+      payload: 100
+      topic: koffie/temp
+    service: mqtt.publish
+'1584555761557':
+  alias: Set coffeemaker to 0c
+  sequence:
+  - data:
+      payload: 0
+      topic: koffie/temp
+    service: mqtt.publish
+'1584555793802':
+  alias: Set coffeemaker to Steaming (145c)
+  sequence:
+  - data:
+      payload: 145
+      topic: koffie/temp
+    service: mqtt.publish
